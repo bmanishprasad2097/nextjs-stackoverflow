@@ -3,111 +3,100 @@ import RenderTag from '@/components/shared/RenderTag';
 import Metric from '@/components/shared/Metric';
 import { formatAndDivideNumber, getTimestamp } from '@/lib/utils';
 import { SignedIn } from '@clerk/nextjs';
+import { Suspense } from 'react';
+import EditDeleteAction from '../shared/EditDeleteAction';
 // import EditDeleteAction from '../shared/EditDeleteAction';
 
 interface QuestionProps {
   _id: string;
+  clerkId?: string | null;
   title: string;
-  tags: {
-    _id: string;
-    name: string;
-  }[];
+  tags: { _id: string; name: string }[];
   author: {
     _id: string;
+    clerkId: string;
     name: string;
-    picture: string;
+    avatar: string;
   };
-  upvotes: string[];
+  upvotes: Array<object>;
   views: number;
   answers: Array<object>;
   createdAt: Date;
-  clerkId?: string | null;
 }
 
 const QuestionCard = ({
-  clerkId,
   _id,
+  clerkId,
   title,
   tags,
   author,
   upvotes,
-  answers,
   views,
-  createdAt
+  answers,
+  createdAt,
 }: QuestionProps) => {
-  const showActionButtons = clerkId;
+  const showActionButtons = clerkId && clerkId === author.clerkId;
 
   return (
-    <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
+    // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
+    <div className="card-wrapper light-border rounded-[10px] border p-9 dark:bg-opacity-80 dark:backdrop-blur-xl sm:px-11">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
-        {/* Date(on mobile) + Title */}
         <div>
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
             {getTimestamp(createdAt)}
           </span>
-
           <Link href={`/question/${_id}`}>
-            <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
+            <p className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
               {title}
-            </h3>
+            </p>
           </Link>
         </div>
 
-        {/* Edit / Delete */}
-        {/* <SignedIn>
+        <SignedIn>
           {showActionButtons && (
-            <EditDeleteAction
-              type="question"
-              itemId={JSON.stringify(_id)}
-            />
+            <Suspense>
+              <EditDeleteAction type="question" itemId={JSON.stringify(_id)} />
+            </Suspense>
           )}
-        </SignedIn> */}
+        </SignedIn>
       </div>
 
-      {/* Tags */}
       <div className="mt-3.5 flex flex-wrap gap-2">
-        {tags.map((tag) => {
-          return <RenderTag key={tag._id} _id={tag._id} name={tag.name} />;
-        })}
+        {tags &&  tags.map((tag) => (
+          <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
+        ))}
       </div>
 
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
-        {/* Author */}
         <Metric
-          imgUrl={author.picture}
-          alt="user"
+          imgUrl={author.avatar}
+          alt="User"
           value={author.name}
-          title={`- asket ${getTimestamp(createdAt)}`}
-          href={`/profile/${author._id}`}
+          title={`• asked ${getTimestamp(createdAt)}`}
+          href={`/profile/${author.clerkId}`}
           isAuthor
           textStyle="body-medium text-dark400_light700"
         />
-
-        <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
-          {/* Votes */}
+        <div className="flex gap-5">
           <Metric
             imgUrl="/assets/icons/like.svg"
-            alt="upvotes"
+            alt="Upvotes"
             value={formatAndDivideNumber(upvotes.length)}
-            title="Votes"
+            title={"Votes"}
             textStyle="small-medium text-dark400_light800"
           />
-
-          {/* Message */}
           <Metric
             imgUrl="/assets/icons/message.svg"
-            alt="message"
+            alt="Message"
             value={formatAndDivideNumber(answers.length)}
-            title="Answers"
+            title={"Answers"}
             textStyle="small-medium text-dark400_light800"
           />
-
-          {/* Views */}
           <Metric
             imgUrl="/assets/icons/eye.svg"
-            alt="eye"
+            alt="Eye"
             value={formatAndDivideNumber(views)}
-            title="Views"
+            title={"Views"}
             textStyle="small-medium text-dark400_light800"
           />
         </div>
