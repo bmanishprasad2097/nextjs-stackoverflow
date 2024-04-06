@@ -1,5 +1,5 @@
 "use client"
-import { useTheme } from '@/context/themeProvider';
+import { useTheme } from '@/context/ThemeProvider';
 import Image from 'next/image';
 import React, { useState } from 'react'
 

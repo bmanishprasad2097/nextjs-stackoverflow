@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter , Space_Grotesk} from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs'
 import "./globals.css";
-import { ThemeProvider } from "@/context/themeProvider";
+import { ThemeProvider } from "@/context/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"],
   weight: ["100","200","300","400", "500", "600", "700" , "800","900"],
