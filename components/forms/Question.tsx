@@ -28,6 +28,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
 import { toast } from "../ui/use-toast";
 import { images } from "@/constants/images";
+import { createQuestion , editQuestion } from "@/database/actions/question.action";
 
 interface QuestionFormProps {
   userId: string;
@@ -60,37 +61,37 @@ export function QuestionForm({
     },
   });
 
-  // async function onSubmit(values: z.infer<typeof QuestionFormSchema>) {
-  //   setIsSubmitting(true);
+  async function onSubmit(values: z.infer<typeof QuestionFormSchema>) {
+    setIsSubmitting(true);
 
-  //   try {
-  //     let question: any = null;
-  //     if (formType === "create") {
-  //       question = await createQuestion({
-  //         title: values.title,
-  //         content: values.explanation,
-  //         tags: values.tags,
-  //         author: JSON.parse(userId),
-  //         path: pathname,
-  //       });
-  //     } else if (formType === "edit") {
-  //       question = await editQuestion({
-  //         questionId: parsedQuestionDetails._id,
-  //         title: values.title,
-  //         content: values.explanation,
-  //         path: pathname,
-  //       });
-  //     }
-  //     router.push(`/question/${question._id}`);
-  //   } catch (error) {
-  //     return toast({
-  //       title: "Something went wrong",
-  //       description: "Please try again later",
-  //     });
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // }
+    try {
+      let question: any = null;
+      if (formType === "create") {
+        question = await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(userId),
+          path: pathname,
+        });
+      } else if (formType === "edit") {
+        question = await editQuestion({
+          questionId: parsedQuestionDetails._id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        });
+      }
+      router.push(`/question/${question._id}`);
+    } catch (error) {
+      return toast({
+        title: "Something went wrong",
+        description: "Please try again later",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   const handleTagsInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,

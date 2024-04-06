@@ -7,6 +7,7 @@ import NoResult from "@/components/shared/NoResult";
 import HomeFilters from "@/components/home/HomeFilters";
 import Filter from "@/components/shared/Filter";
 import QuestionCard from "@/components/cards/QuestionCard";
+import { Suspense } from "react";
 
 interface QuestionProps {
   _id: string;
@@ -104,13 +105,15 @@ export default function Home() {
         </Link>
       </div>
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
-        <LocalSearchbar
-          route={"/"}
-          iconPosition="left"
-          imgSrc="/assets/icons/search.svg"
-          placeHolder="Search for questions"
-          otherClasses="flex-1"
-        />
+        <Suspense>
+          <LocalSearchbar
+            route={"/"}
+            iconPosition="left"
+            imgSrc="/assets/icons/search.svg"
+            placeHolder="Search for questions"
+            otherClasses="flex-1"
+          />
+        </Suspense>
         {/* <Filter
           filter={HomePagefilter}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
