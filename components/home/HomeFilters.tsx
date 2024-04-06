@@ -6,6 +6,7 @@ import { HomePagefilter } from "@/constants/filters";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { formUrlQuery } from "@/lib/utils";
 // import { formUrlQuery } from "@/lib/utils";
 
 const HomeFilters = () => {
@@ -13,29 +14,29 @@ const HomeFilters = () => {
   const router = useRouter();
   const [active, setActive] = useState("");
 
-//   const handleTypeClick = (item: string) => {
-//     if (active === item) {
-//       setActive(""); // reset active state
+  const handleTypeClick = (item: string) => {
+    if (active === item) {
+      setActive(""); // reset active state
 
-//       const newUrl = formUrlQuery({
-//         params: searchParams.toString(),
-//         key: "filter",
-//         value: null,
-//       });
+      const newUrl = formUrlQuery({
+        params: searchParams.toString(),
+        key: "filter",
+        value: null,
+      });
 
-//       router.push(newUrl, { scroll: false });
-//     } else {
-//       setActive(item); // set active state
+      router.push(newUrl, { scroll: false });
+    } else {
+      setActive(item); // set active state
 
-//       const newUrl = formUrlQuery({
-//         params: searchParams.toString(),
-//         key: "filter",
-//         value: item.toLowerCase(),
-//       });
+      const newUrl = formUrlQuery({
+        params: searchParams.toString(),
+        key: "filter",
+        value: item.toLowerCase(),
+      });
 
-//       router.push(newUrl, { scroll: false });
-//     }
-//   };
+      router.push(newUrl, { scroll: false });
+    }
+  };
 
   return (
     <div className="mt-10 hidden flex-wrap gap-3 md:flex">
