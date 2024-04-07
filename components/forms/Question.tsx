@@ -67,6 +67,7 @@ export function QuestionForm({
     try {
       let question: any = null;
       if (formType === "create") {
+        console.log(formType)
         question = await createQuestion({
           title: values.title,
           content: values.explanation,
@@ -74,6 +75,8 @@ export function QuestionForm({
           author: JSON.parse(userId),
           path: pathname,
         });
+        console.log(formType)
+        console.log(question , 'hola')
       } else if (formType === "edit") {
         question = await editQuestion({
           questionId: parsedQuestionDetails._id,
@@ -84,6 +87,7 @@ export function QuestionForm({
       }
       router.push(`/question/${question._id}`);
     } catch (error) {
+      console.log(error)
       return toast({
         title: "Something went wrong",
         description: "Please try again later",

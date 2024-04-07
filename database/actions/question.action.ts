@@ -80,7 +80,7 @@ export async function createQuestion(params: CreateQuestionParams) {
   const { title, content, tags, author, path } = params;
   try {
     await connectToDatabase();
-
+    console.log('inside create question but before Question.create()');
     //Create the question
     const question = await Question.create({
       title,

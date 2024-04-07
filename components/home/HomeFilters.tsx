@@ -1,22 +1,18 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable tailwindcss/no-custom-classname */
 "use client";
-
-import { HomePagefilter } from "@/constants/filters";
+import { HomePageFilters } from "@/constants/filters";
 import { Button } from "../ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery } from "@/lib/utils";
-// import { formUrlQuery } from "@/lib/utils";
 
 const HomeFilters = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const [active, setActive] = useState("");
+  const searchParams = useSearchParams();
+  const [active, setActive] = useState("newest");
 
   const handleTypeClick = (item: string) => {
     if (active === item) {
-      setActive(""); // reset active state
+      setActive("");
 
       const newUrl = formUrlQuery({
         params: searchParams.toString(),
@@ -26,7 +22,7 @@ const HomeFilters = () => {
 
       router.push(newUrl, { scroll: false });
     } else {
-      setActive(item); // set active state
+      setActive(item);
 
       const newUrl = formUrlQuery({
         params: searchParams.toString(),
@@ -40,17 +36,24 @@ const HomeFilters = () => {
 
   return (
     <div className="mt-10 hidden flex-wrap gap-3 md:flex">
-      {HomePagefilter.map((item) => (
+      {HomePageFilters.map((item) => (
         <Button
-          className={`body-medium rounded-lg px-6 py-3 capitalize shadow-md dark:shadow-none ${
-            active === item.value
-              ? "bg-primary-100 text-primary-500 dark:bg-dark-400 dark:hover:bg-dark-400"
-              : "bg-light-800 text-light-500 hover:bg-light-800 dark:bg-dark-300 dark:text-light-500 dark:hover:bg-dark-300"
-          }`}
+          title="Select filter type"
           key={item.value}
-          onClick={() => {}}
+          onClickCapture={() => handleTypeClick(item.value)}
+          className={`body-medium  rounded-lg px-6 py-3 capitalize shadow-none dark:bg-dark-300 ${
+            active === item.value
+              ? "bg-primary-100 dark:bg-dark-400 "
+              : "bg-light-800"
+          }`}
         >
-          {item.name}
+          <span
+            className={`${
+              active === item.value ? "primary-text-gradient" : "text-light-500"
+            }`}
+          >
+            {item.name}
+          </span>
         </Button>
       ))}
     </div>
