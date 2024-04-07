@@ -1,80 +1,76 @@
-import React from 'react'
 import Link from "next/link";
+import UserMenu from "./navbar/UserMenu";
 import Image from "next/image";
 import RenderTag from "./RenderTag";
+import { getHotQuestions } from "@/database/actions/question.action";
+import { getPopularTags } from "@/database/actions/tag.action";
+import { images } from "@/constants/images";
 
-const RightSidebar = () => {
-
-    const popularTag = [
-          {
-            _id: "1",
-            tag: "ReactJs",
-            number: "20152+",
-          },
-          {
-            _id: "2",
-            tag: "Nodejs",
-            number: "20152+",
-          },
-          {
-            _id: "3",
-            tag: "javascript",
-            number: "20152+",
-          },
-          {
-            _id: "4",
-            tag: "java",
-            number: "20152+",
-          },
-          {
-            _id: "5",
-            tag: "nextJs",
-            number: "20152+",
-          },
-        ];
-    const hotQuestion = [
-        {_id:1 , title:'How would I use Typescript'}
-    ]
+const RightSidebar = async () => {
+  const hotQuestions = await getHotQuestions();
+  const popularTags = await getPopularTags();
 
   return (
-    <section className="background-light900_dark200 light-border custom-scrollbar sticky right-0 top-0 flex h-screen flex-col overflow-y-auto border-l p-6 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden lg:w-[350px]">
-    <div>
-      <h3 className="h3-bold text-dark200_light900">Top Questions</h3>
-      <div className="mt-7 flex w-full flex-col gap-[30px]">
-        {hotQuestion?.map((item) => (
-          <Link
-            className="flex cursor-pointer items-center justify-between gap-7"
-            href={`/question/${item._id}`}
-            key={item._id}
-          >
-            <p className="body-medium text-dark500_light700">{item.title}</p>
-            <Image
-              src="/assets/icons/chevron-right.svg"
-              height={20}
-              width={20}
-              alt="chevron icon"
-              className="invert-colors"
-            />
-          </Link>
-        ))}
+    // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
+    <section className="light-border custom-scrollbar shadow-light100_dark100 sticky right-0 top-0 z-40 flex h-screen w-[350px] flex-col gap-16 overflow-y-auto border-l bg-opacity-50 px-6 pb-12 pt-6 backdrop-blur-xl max-xl:hidden lg:z-50">
+      <div>
+        <UserMenu />
       </div>
-    </div>
-    <div className="mt-16">
-      <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
-      <div className="mt-7 flex flex-col">
-        {popularTag?.map((item) => (
-          <RenderTag
-            key={item._id}
-            _id={item._id}
-            name={'name'}
-            totalCount={'10'}
-            showCount
-          />
-        ))}
+      <div className="">
+        <div>
+          <p className="h3-bold text-dark200_light900">Top Questions</p>
+          <div className="mt-7 flex w-full flex-col gap-4">
+            {hotQuestions &&
+            Array.isArray(hotQuestions) &&
+            hotQuestions.length > 0 ? (
+              hotQuestions.map((question: any) => (
+                <Link
+                  aria-label="Question card"
+                  href={`/question/${question._id}`}
+                  key={question._id}
+                  className="hover:background-hover flex min-h-[41px] cursor-pointer items-center justify-between gap-7 rounded-lg p-2"
+                >
+                  <p className="body-medium text-dark500_light700">
+                    {question.title}
+                  </p>
+                  <Image
+                    src={images.chevronRight}
+                    alt="chevron"
+                    width={20}
+                    height={20}
+                    className="invert-colors"
+                    unoptimized
+                  />
+                </Link>
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+        <div className="mt-16">
+          <p className="h3-bold text-dark200_light900">Popular Tags</p>
+          <div className="mt-7 flex flex-col gap-4">
+            {popularTags &&
+            Array.isArray(popularTags) &&
+            popularTags.length > 0 ? (
+              popularTags.map((tag: any) => (
+                <RenderTag
+                  key={tag._id}
+                  _id={tag._id}
+                  name={tag.name}
+                  totalQuestions={tag.totalQuestions}
+                  showCount
+                />
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
-  )
-}
+    </section>
+  );
+};
 
-export default RightSidebar
+export default RightSidebar;

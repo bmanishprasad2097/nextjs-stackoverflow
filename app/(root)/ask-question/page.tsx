@@ -20,9 +20,9 @@ export default async function AskQuestionPage() {
     <div>
       <h1 className="h1-bold text-dark100_light900">Ask question</h1>
       <div className="mt-9">
-        <Suspense>
+
           <QuestionForm userId={JSON.stringify(dbUser._id)} formType="create" />
-        </Suspense>
+   
       </div>
     </div>
   );

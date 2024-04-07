@@ -1,13 +1,9 @@
-import React from 'react'
-import Navbar from '@/components/shared/navbar/Navbar'
+import { LayoutProps } from "@/types";
 
-const Layout = ({children} : {children : React.ReactNode}) => {
+export default function Layout({ children }: LayoutProps) {
   return (
-    <div>
-      <Navbar />
+    <main className="background-main-gradient flex min-h-screen w-full items-center justify-center">
       {children}
-    </div>
-  )
+    </main>
+  );
 }
-
-export default Layout

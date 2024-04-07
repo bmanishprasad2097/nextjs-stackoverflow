@@ -1,4 +1,4 @@
-export const HomePagefilter = [
+export const HomePageFilters = [
     {
       name: "Newest",
       value: "newest",
